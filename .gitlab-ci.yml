@@ -1,0 +1,37 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Build and Push Docker Compose
+        run: |
+          # Configurar o endereço do ECR
+          ECR_URI="977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity"
+
+          # Autenticar no ECR
+          aws ecr get-login-password --region $aws-region | docker login --username AWS --password-stdin $ECR_URI
+
+          # Construir e enviar a imagem para o ECR
+          docker-compose build
+          docker-compose push
+
+      - name: Update ECS Service
+        run: |
+          aws ecs update-service --cluster intervaloverity_tech --service api --force-new-deployment
