@@ -20,8 +20,8 @@ namespace ApiMySqlDocker
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var host = Configuration["DBHOST"] ?? "localhost";
-            var port = Configuration["DBPORT"] ?? "3306";
+            var host = Configuration["DBHOST"] ?? Configuration.GetConnectionString("MYSQL_DBHOST");
+            var port = Configuration["DBPORT"] ?? Configuration.GetConnectionString("MYSQL_DBPORT"); ;
             var password = Configuration["MYSQL_PASSWORD"] ?? Configuration.GetConnectionString("MYSQL_PASSWORD");
             var userid = Configuration["MYSQL_USER"] ?? Configuration.GetConnectionString("MYSQL_USER");
             var productsdb = Configuration["MYSQL_DATABASE"] ?? Configuration.GetConnectionString("MYSQL_DATABASE");

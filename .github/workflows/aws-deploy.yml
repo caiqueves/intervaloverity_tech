@@ -1,0 +1,34 @@
+name: AWS ECS Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Login to Amazon ECR
+      run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 977535253370.dkr.ecr.us-east-1.amazonaws.com
+
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t 977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest .
+        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest
+
+    - name: Deploy to AWS ECS
+      run: |
+        ecs-cli configure --region us-east-1 --access-key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret-key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --cluster intervaloverity --default-launch-type EC2 --config-name webapi
+        ecs-cli compose --file intervaloverity_tech\docker-compose.yml up
