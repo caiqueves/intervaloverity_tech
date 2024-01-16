@@ -18,10 +18,12 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        docker build -t intervaloverity .
-        docker tag webapi:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity:latest
-        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity:latest
-
+        docker-compose build .
+        docker tag apimysqldocker:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
+        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
+        docker tag debian:10-slim 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
+        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
+        
     - name: Deploy to AWS ECS
       run: |
         ecs-cli configure --cluster intervaloverity_tech --region ${{ secrets.AWS_REGION }}
