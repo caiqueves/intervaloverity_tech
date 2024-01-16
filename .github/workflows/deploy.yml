@@ -21,9 +21,6 @@ jobs:
         docker build -t webapi .
         docker tag webapi:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest
         docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest
-        docker build -t mysqldb .
-        docker tag mysqldb:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/mysqldb:latest
-        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/mysqldb:latest
 
     - name: Deploy to AWS ECS
       run: |
