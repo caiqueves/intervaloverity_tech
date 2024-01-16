@@ -18,7 +18,7 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        docker build -t intervaloverity .
+        docker build -t intervaloverity -f intervaloverity_tech\ApiMySqlDocker\DockerFile .
         docker tag webapi:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity:latest
         docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity:latest
 
