@@ -16,10 +16,17 @@ jobs:
     
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
+      env:
+          AWS_DEFAULT_REGION: ${{ null }}
+          AWS_REGION: ${{ null }}
+          AWS_ACCESS_KEY_ID: ${{ null }}
+          AWS_SECRET_ACCESS_KEY: ${{ null }}
+          AWS_SESSION_TOKEN: ${{ null }}
       with:
         aws-access-key-id: 977535253370
         aws-secret-access-key: Alterar@30
         aws-region: us-east-1
+      
         
     - name: Debug Credentials
       run: |
