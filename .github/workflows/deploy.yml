@@ -14,16 +14,19 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Configure AWS Credentials
-      run: aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} && aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} && aws configure set region ${{ secrets.AWS_REGION }}
+      run: |
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws configure set region ${{ secrets.AWS_REGION }}
 
     - name: Build and Push Docker Image
       run: |
         docker-compose build
-        docker tag apimysqldocker:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
-        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
-        docker tag debian:10-slim 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
-        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
-        
+        docker tag apimysqldocker:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity:latest
+        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity:latest
+        docker tag mysql:8.0.22 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity:mysql-8.0.22
+        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity:mysql-8.0.22
+
     - name: Deploy to AWS ECS
       run: |
         ecs-cli configure --cluster intervaloverity_tech --region ${{ secrets.AWS_REGION }}
