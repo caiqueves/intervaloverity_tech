@@ -23,8 +23,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ null }}
           AWS_SESSION_TOKEN: ${{ null }}
       with:
-        aws-access-key-id: 977535253370
-        aws-secret-access-key: Alterar@30
+        aws-access-key-id: 
+        aws-secret-access-key: 
         aws-region: us-east-1
       
         
@@ -34,13 +34,13 @@ jobs:
         echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
 
     - name: Login to Amazon ECR
-      run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 977535253370.dkr.ecr.us-east-1.amazonaws.com
+      run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin idconta.dkr.ecr.us-east-1.amazonaws.com
 
     - name: Build and Push Docker Image
       run: |
-        docker build -t 977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest .
-        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest
+        docker build -t idconta.dkr.ecr.us-east-1.amazonaws.com/webapi:latest .
+        docker push idconta.dkr.ecr.us-east-1.amazonaws.com/webapi:latest
 
     - name: Deploy to AWS ECS
       run: |
-        aws ecs update-service --cluster intervaloverity --task arn:aws:ecs:us-east-1:977535253370:task/intervaloverity/85aa15e8b2b742d7841c7e4607eedc24 --force-new-deployment
+        aws ecs update-service --cluster intervaloverity --task arn:aws:ecs:us-east-1:idconta:task/intervaloverity/85aa15e8b2b742d7841c7e4607eedc24 --force-new-deployment
