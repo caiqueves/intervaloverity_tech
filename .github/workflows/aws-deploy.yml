@@ -16,8 +16,8 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: 977535253370
+        aws-secret-access-key: Alterar@30
         aws-region: us-east-1
 
     - name: Login to Amazon ECR
@@ -30,5 +30,4 @@ jobs:
 
     - name: Deploy to AWS ECS
       run: |
-        ecs-cli configure --region us-east-1 --access-key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret-key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --cluster intervaloverity --default-launch-type EC2 --config-name webapi
-        ecs-cli compose --file intervaloverity_tech\docker-compose.yml up
+        aws ecs update-service --cluster intervaloverity --task webapi --force-new-deployment
