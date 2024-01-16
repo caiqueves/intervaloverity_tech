@@ -18,9 +18,9 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        docker build -t webapi .
-        docker tag webapi:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest
-        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest
+        docker build -t intervaloverity .
+        docker tag webapi:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity:latest
+        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity:latest
 
     - name: Deploy to AWS ECS
       run: |
