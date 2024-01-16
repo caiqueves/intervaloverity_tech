@@ -18,7 +18,7 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-        docker-compose build .
+        docker-compose build
         docker tag apimysqldocker:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
         docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
         docker tag debian:10-slim 977535253370.dkr.ecr.us-east-1.amazonaws.com/intervaloverity
