@@ -3,7 +3,7 @@ version: '3.4'
 services:
   apimysqldocker:
     image: ${DOCKER_REGISTRY-}apimysqldocker
-    container_name: apiaspn
+    container_name: webapi
     build:
       context: .
       dockerfile: ApiMySqlDocker/Dockerfile

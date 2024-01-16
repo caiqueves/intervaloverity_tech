@@ -1,0 +1,31 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Configure AWS Credentials
+      run: aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} && aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} && aws configure set region ${{ secrets.AWS_REGION }}
+
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t webapi .
+        docker tag webapi:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest
+        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest
+        docker build -t mysqldb .
+        docker tag mysqldb:latest 977535253370.dkr.ecr.us-east-1.amazonaws.com/mysqldb:latest
+        docker push 977535253370.dkr.ecr.us-east-1.amazonaws.com/mysqldb:latest
+
+    - name: Deploy to AWS ECS
+      run: |
+        ecs-cli configure --cluster intervaloverity_tech --region ${{ secrets.AWS_REGION }}
+        ecs-cli compose --file docker-compose.yml service up
