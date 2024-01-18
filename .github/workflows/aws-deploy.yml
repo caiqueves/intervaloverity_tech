@@ -43,4 +43,4 @@ jobs:
 
     - name: Deploy to AWS ECS
       run: |
-        aws ecs update-service --cluster intervaloverity --task arn:aws:ecs:us-east-1:idconta:task/intervaloverity/85aa15e8b2b742d7841c7e4607eedc24 --force-new-deployment
+        aws ecs update-service --cluster intervaloverity --task arn:aws:ecs:us-east-1:idconta:idcluster --force-new-deployment
