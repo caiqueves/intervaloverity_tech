@@ -44,15 +44,21 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
-    name: Deploy
+  Checkout:
+    name: Checkout
     runs-on: ubuntu-latest
     environment: production
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
+      
+  login_AWS:
+    name: login AWS
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps: 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -64,6 +70,12 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
+  build_AWS:
+    name: build AWS
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
@@ -84,10 +96,23 @@ jobs:
         task-definition: ${{ env.ECS_TASK_DEFINITION }}
         container-name: ${{ env.CONTAINER_NAME }}
         image: ${{ steps.build-image.outputs.image }}
-
+            
+  deploy_AWS:
+    name: deploy AWS
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         cluster: ${{ env.ECS_CLUSTER }}
         wait-for-service-stability: true
+        
+    - name: Deploy to ECS
+      uses: aws-actions/amazon-ecs-deploy-task@v1
+      with:
+          cluster: ${{ env.ECS_CLUSTER }}
+          task-definition: "task_definition.json"
+          container-name: "webapi"
