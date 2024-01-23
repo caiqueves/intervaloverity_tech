@@ -92,9 +92,10 @@ jobs:
         cluster: ${{ env.ECS_CLUSTER }}
         wait-for-service-stability: true
         
-    - name: Deploy to ECS
-      uses: aws-actions/amazon-ecs-deploy-task@v1
+    - name: Run ECS Task
+      uses: aws-actions/amazon-ecs-run-task@v1
       with:
           cluster: ${{ env.ECS_CLUSTER }}
-          task-definition: "task_definition.json"
-          container-name: "webapi"
+          task-definition:  ${{ steps.task-def.outputs.task-definition }}  # Substitua pelo ARN da sua definição de tarefa
+          launch-type: FARGATE  # Substitua pela opção desejada, EC2 ou FARGATE
+          container-overrides: '[{"name":"${{ env.CONTAINER_NAME }}","command":["your-command"]}]'  # Substitua pelo nome do contêiner e comando desejados
