@@ -94,4 +94,4 @@ jobs:
         
     - name: Update ECS Service
       run: |
-          aws ecs update-service --cluster ${{ env.ECS_CLUSTER }} --task-definition arn:aws:ecs:us-east-1:977535253370:task-definition/webapi-td:3
+          aws ecs update-service --cluster intervaloverity --task-definition arn:aws:ecs:us-east-1:977535253370:task-definition/webapi-td:3
