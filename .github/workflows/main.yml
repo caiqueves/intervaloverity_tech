@@ -1,0 +1,80 @@
+name: Deploy to ECS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Set Environment Variables
+        id: set-env
+        run: |
+          echo "{
+            \"containerDefinitions\": [
+              {
+                \"name\": \"webapi-container\",
+                \"memory\": 3,
+                \"portMappings\": [
+                  {
+                    \"hostPort\": 80,
+                    \"containerPort\": 80,
+                    \"protocol\": \"tcp\"
+                  }
+                ],
+                \"environment\": [
+                  {
+                    \"name\": \"MYSQL_DBHOST\",
+                    \"value\": \"44.192.56.233\"
+                  },
+                  {
+                    \"name\": \"MYSQL_DBPORT\",
+                    \"value\": \"3306\"
+                  },
+                  {
+                    \"name\": \"MYSQL_PASSWORD\",
+                    \"value\": \"hw8vup5e\"
+                  },
+                  {
+                    \"name\": \"MYSQL_USER\",
+                    \"value\": \"mac\"
+                  },
+                  {
+                    \"name\": \"MYSQL_DATABASE\",
+                    \"value\": \"productsdb\"
+                  },
+                  {
+                    \"name\": \"ASPNETCORE_ENVIRONMENT\",
+                    \"value\": \"Development\"
+                  },
+                  {
+                    \"name\": \"MYSQL_ROOT_PASSWORD\",
+                    \"value\": \"hw8vup5e\"
+                  }
+                ],
+                \"essential\": true,
+                \"image\": \"977535253370.dkr.ecr.us-east-1.amazonaws.com/webapi:latest\",
+                \"cpu\": 1,
+                \"memoryReservation\": 3
+              }
+            ],
+            \"family\": \"webapi-td\"
+          }" >> task_definition.json
+          
+      - name: Deploy to ECS
+        run: |
+          aws ecs update-service --cluster $CLUSTER_NAME --service $TASK_DEFINITION_NAME --task-definition $TASK_DEFINITION_NAME --region $AWS_DEFAULT_REGION
+
