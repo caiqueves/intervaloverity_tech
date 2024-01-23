@@ -91,11 +91,4 @@ jobs:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         cluster: ${{ env.ECS_CLUSTER }}
         wait-for-service-stability: true
-        
-    - name: Run ECS Task
-      uses: aws-actions/amazon-ecs-run-task@v1
-      with:
-          cluster: ${{ env.ECS_CLUSTER }}
-          task-definition:  ${{ steps.task-def.outputs.task-definition }}  # Substitua pelo ARN da sua definição de tarefa
-          launch-type: FARGATE  # Substitua pela opção desejada, EC2 ou FARGATE
-          container-overrides: '[{"name":"${{ env.CONTAINER_NAME }}","command":["your-command"]}]'  # Substitua pelo nome do contêiner e comando desejados
+  
