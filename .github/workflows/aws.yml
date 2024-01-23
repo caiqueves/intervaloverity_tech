@@ -35,9 +35,9 @@ env:
   ECR_REPOSITORY: webapi           # set this to your Amazon ECR repository name
   ECS_SERVICE: teste                 # set this to your Amazon ECS service name
   ECS_CLUSTER: intervaloverity                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: teste2 # set this to the path to your Amazon ECS task definition
+  ECS_TASK_DEFINITION: webapi # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: testetetete           # set this to the name of the container in the
+  CONTAINER_NAME: webapi           # set this to the name of the container in the
                                                # containerDefinitions section of your task definition
 
 permissions:
@@ -79,14 +79,14 @@ jobs:
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      uses: aws-actions/amazon-ecs-render-task-definition@v13
       with:
         task-definition: ${{ env.ECS_TASK_DEFINITION }}
         container-name: ${{ env.CONTAINER_NAME }}
         image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v13
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: ${{ env.ECS_SERVICE }}
