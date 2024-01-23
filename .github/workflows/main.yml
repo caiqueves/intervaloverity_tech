@@ -76,4 +76,4 @@ jobs:
           
       - name: Deploy to ECS
         run: |
-          aws ecs update-service --cluster $CLUSTER_NAME --service $TASK_DEFINITION_NAME --task-definition $TASK_DEFINITION_NAME --region $AWS_DEFAULT_REGION
+          aws ecs update-service --cluster intervaloverity --service webapi --task-definition webapi --region us-east-1
